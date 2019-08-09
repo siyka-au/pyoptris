@@ -1,0 +1,30 @@
+DEBUG [IRDeviceParams.cpp:164] @ 0.000944375s :Parameters
+DEBUG [IRDeviceParams.cpp:165] @ 0.00100267s :serial: 0
+DEBUG [IRDeviceParams.cpp:166] @ 0.00102971s :videoformatindex: 0
+DEBUG [IRDeviceParams.cpp:167] @ 0.00105224s :fov: 0
+DEBUG [IRDeviceParams.cpp:168] @ 0.00107358s :optics_text: 0000000000000000
+DEBUG [IRDeviceParams.cpp:169] @ 0.00109491s :formatspath: 000001FFBAA7DB10
+DEBUG [IRDeviceParams.cpp:170] @ 0.00111624s :calipath: 0000000000000000
+DEBUG [IRDeviceParams.cpp:171] @ 0.00114749s :temperature min: 0
+DEBUG [IRDeviceParams.cpp:172] @ 0.00118535s :temperature max: 0
+DEBUG [IRDeviceParams.cpp:173] @ 0.00148612s :framerate: 20
+DEBUG [IRDeviceParams.cpp:174] @ 0.00150595s :bispectral: 0
+DEBUG [IRDeviceParams.cpp:175] @ 0.00151947s :average: 0
+DEBUG [IRDeviceParams.cpp:176] @ 0.0015369s :flag automatic: 1
+DEBUG [IRDeviceParams.cpp:177] @ 0.00155102s :min interval: 15
+DEBUG [IRDeviceParams.cpp:178] @ 0.00156454s :max interval: 0
+DEBUG [IRDeviceParams.cpp:179] @ 0.00157716s :chip heating mode: 0
+DEBUG [IRDeviceParams.cpp:180] @ 0.00159068s :chip heating fixed val: 40
+DEBUG [IRDeviceParams.cpp:181] @ 0.00160391s :focus:  50
+DEBUG [IRDeviceParams.cpp:182] @ 0.00161713s :enable extended temp range: 0
+DEBUG [IRDeviceParams.cpp:183] @ 0.00163005s :buffer queue size: 5
+DEBUG [IRDeviceParams.cpp:184] @ 0.00164267s :enable high precision: 0
+DEBUG [Cali.cpp:97] @ 0.129381s :Calibration directory path: \\corp.inductabend.com.au\Public\Profiles$\malleblas\AppData\Roaming\Imager\Cali
+DEBUG [Cali.cpp:98] @ 0.129414s :Calibration file name: Cali-14060035.xml
+DEBUG [Cali.cpp:108] @ 0.134124s :Calibration data A: 1450 B:470 C:4095 D:1000
+DEBUG [Cali.cpp:72] @ 0.235865s :Calibration XML file already loaded.
+INFO [IRImager.cpp:272] @ 0.235904s :Init thermal imager with size: 385x289@27 Hz
+DEBUG [IRImager.cpp:289] @ 0.235923s :No temperature range configuration specified. Setting default values tMin: -20 , tMax: 100
+ERROR [IRImager.cpp:318] @ 0.235996s :Formats.def file cannot be found. Check configuration of <formatspath> tag and existence of file.
+DEBUG [IRImager.cpp:667] @ 0.256283s :Delete timer
+DEBUG [IRImager.cpp:673] @ 0.256526s :Delete manual timer

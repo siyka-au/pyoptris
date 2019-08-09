@@ -1,0 +1,446 @@
+# This file must not be changed
+
+[ImgProc format definition file]
+Version = 2
+Release = 11
+
+# -----------------------------------------------------------------------------
+#
+#       PI
+#
+# -----------------------------------------------------------------------------
+[Format]
+Guid = {7A9AAE14-E7AE-485f-B73A-946F94C061AB}
+Name = "PI 160x120 @ 100Hz"
+HWRev = (1..19)
+FWRev = (1795..1920)
+Channels = 1
+In = 164 120 100
+Out = 160 120 100
+SFrames = 1
+Def = (0 1 m:2)(0 1 s:3 d:160 s:5 d:160)(328 59 s:2 d:160 s:5 d:160 s:1)
+[Format end]
+
+
+# -----------------------------------------------------------------------------
+#
+#       PI160
+#
+# -----------------------------------------------------------------------------
+[Format]
+# this format is deprecated and replaced by {EFB236F9-5106-445D-9297-78D1710985FF}
+Guid = {7A9AAE14-E7AE-485f-B73A-946F94C06100}
+Name = "PI160 160x120 @ 120Hz"
+HWRev = (20..99)
+FWRev = (2000..2025)
+Channels = 1
+In = 160 121 120
+Out = 160 120 120
+SFrames = 1
+Def = (0 120 d:160)(19200 1 m:160)
+[Format end]
+# -----------------------------------------------------------------------------
+[Format]
+# this format replaces {7A9AAE14-E7AE-485f-B73A-946F94C06100}
+Guid = {EFB236F9-5106-445D-9297-78D1710985FF}
+Name = "PI160 160x120 @ 120Hz"
+HWRev = (20..99)
+FWRev = (2026..2199)
+Channels = 1
+In = 160 122 120
+Out = 160 120 120
+SFrames = 1
+Def = (0 120 d:160)(19200 1 m:160 s:160)
+[Format end]
+
+
+# -----------------------------------------------------------------------------
+#
+#       PI200/230
+#
+# -----------------------------------------------------------------------------
+[Format]
+Guid = {80DDA89F-3967-4e88-951E-466A912A3C57}
+Name = "PI200 IR=160x120@96Hz, Vis=640x480@32Hz"
+HWRev = (20..99)
+FWRev = (2200..2399)
+Channels = 2
+In = 764 480 32
+#IR:
+Out = 160 120 96
+SFrames = 3
+Def = (     0 160 s:640 d:120 s:4)(305600 13 s:763 m:1 s:764)
+Def = (122240 160 s:640 d:120 s:4)(325464 13 s:763 m:1 s:764)
+Def = (244480 160 s:640 d:120 s:4)(345328 13 s:763 m:1 s:764)
+#Vis:
+Out = 640 480 32
+SFrames = 1
+Def = (0 480 d:640 s:124)(305600 13 s:763 m:1 s:764)
+[Format end]
+# -----------------------------------------------------------------------------
+[Format]
+Guid = {12CF11ED-0190-457e-AEBF-4C1863E98D3C}
+Name = "PI200 IR=160x120@128Hz, Vis=596x447@32Hz"
+HWRev = (20..99)
+FWRev = (2200..2399)
+Channels = 2
+In = 760 480 32
+#IR:
+Out = 160 120 128
+SFrames = 4
+Def = (     0 120 s:596 d:160 s:4)(284240 13 s:759 m:1 s:760)
+Def = ( 91200 120 s:596 d:160 s:4)(304000 13 s:759 m:1 s:760)
+Def = (182400 120 s:596 d:160 s:4)(323760 13 s:759 m:1 s:760)
+Def = (273600 120 s:596 d:160 s:4)(343520 13 s:759 m:1 s:760)
+#Vis:
+Out = 596 447 32
+SFrames = 1
+Def = (12160 447 d:596 s:164)(284240 13 s:759 m:1 s:760)
+[Format end]
+# -----------------------------------------------------------------------------
+[Format]
+Guid = {D5847288-6F9E-428d-8E9A-6D3C415E8BF4}
+Name = "PI200 160x120 @ 128Hz"
+HWRev = (20..99)
+FWRev = (2200..2399)
+Channels = 1
+In = 164 120 128
+Out = 160 120 128
+SFrames = 1
+Def = (0 120 d:160 s:4)(15088 13 s:163 m:1 s:164)
+[Format end]
+
+
+# -----------------------------------------------------------------------------
+#
+#       PI400/450
+#
+# -----------------------------------------------------------------------------
+[Format]
+# this format is deprecated and replaced by {E547EE1D-E3F3-4A35-9B35-E8A6EE96E1EB}
+Guid = {A6160508-8450-4c25-B80F-976B2BF06E93}
+Name = "PI400 382x288 @ 27Hz"
+HWRev = (20..20)(400..499)
+FWRev = (2400..2437)
+Channels = 1
+In = 385 289 27
+Out = 382 288 27
+SFrames = 1
+Def = (0 288 d:382 s:3)(110880 1 m:385)
+[Format end]
+# -----------------------------------------------------------------------------
+[Format]
+# this format replaces {A6160508-8450-4c25-B80F-976B2BF06E93}
+Guid = {E547EE1D-E3F3-4A35-9B35-E8A6EE96E1EB}
+Name = "PI400 382x288 @ 27Hz"
+HWRev = (20..20)(400..499)
+FWRev = (2433..2433)(2438..2599)
+Channels = 1
+In = 382 290 27
+Out = 382 288 27
+SFrames = 1
+Def = (0 288 d:382)(110398 1 m:382)
+[Format end]
+# -----------------------------------------------------------------------------
+[Format]
+Guid = {4F2096CC-6E92-4608-8076-26AC3FE24353}
+Name = "PI400 382x288 @ 80Hz"
+HWRev = (20..20)(400..499)
+FWRev = (2400..2599)
+Channels = 1
+In = 384 288 80
+Out = 382 288 80
+SFrames = 1
+Def = (0 250 d:382 s:2)(96000 12 d:382 m:1 s:1 d:382 s:2 d:382 s:2)(109824 1 d:382 m:1 s:1 d:382 s:2)
+[Format end]
+
+
+# -----------------------------------------------------------------------------
+#
+# PI640
+#
+# -----------------------------------------------------------------------------
+[Format]
+Guid = {2000E8D0-04B4-4441-8BBE-D711380455B1}
+Name = "PI600 640x480 @ 32Hz"
+HWRev = (600..699)
+FWRev = (2600..2799)
+Channels = 1
+In = 642 480 32
+Out = 640 480 32
+SFrames = 1
+Def = (0 25 d:640 s:2 d:640 s:2 d:640 s:2 d:640 s:1 m:1)(64200 380 d:640 s:2)
+[Format end]
+# -----------------------------------------------------------------------------
+[Format]
+Guid = {A26D0822-6178-48e8-A280-6E546B471F41}
+Name = "PI640 640x120 @ 125Hz flex"
+HWRev = (600..699)
+FWRev = (2600..2799)
+Channels = 1
+In = 642 120 125
+Out = 640 120 125
+SFrames = 1
+Def = (0 25 d:640 s:2 d:640 s:2 d:640 s:2 d:640 s:1 m:1)(64200 20 d:640 s:2)
+DeviceRes = 640 480 32
+[Format end]
+
+
+# -----------------------------------------------------------------------------
+#
+# PI1M
+#
+# -----------------------------------------------------------------------------
+[Format]
+# this format is deprecated and replaced by {C6D1DC62-F2CC-4773-BFA3-E7B61E744085}
+Guid = {9860B303-B38E-49C1-9C54-21EB77C37E35}
+Name = "PI1M 382x288 @ 27Hz"
+HWRev = (2100..2199)
+FWRev = (2800..2818)
+Channels = 1
+In = 385 289 27
+Out = 382 288 27
+SFrames = 1
+Def = (0 288 d:382 s:3)(110880 1 m:385)
+[Format end]
+# -----------------------------------------------------------------------------
+[Format]
+# this format replaces {9860B303-B38E-49C1-9C54-21EB77C37E35}
+Guid = {C6D1DC62-F2CC-4773-BFA3-E7B61E744085}
+Name = "PI1M 382x288 @ 27Hz"
+HWRev = (2100..2199)
+FWRev = (2818..2999)
+Channels = 1
+In = 382 290 27
+Out = 382 288 27
+SFrames = 1
+Def = (0 288 d:382)(110398 1 m:382)
+[Format end]
+# -----------------------------------------------------------------------------
+[Format]
+Guid = {1CFFA483-43E6-4478-95AE-391979BA6E76}
+Name = "PI1M 382x288 @ 80Hz"
+HWRev = (2100..2199)
+FWRev = (2800..2999)
+Channels = 1
+In = 384 288 80
+Out = 382 288 80
+SFrames = 1
+Def = (0 250 d:382 s:2)(96000 12 d:382 m:1 s:1 d:382 s:2 d:382 s:2)(109824 1 d:382 m:1 s:1 d:382 s:2)
+[Format end]
+# -----------------------------------------------------------------------------
+[Format]
+Guid = {752969F2-89F1-4215-815D-5349BC1A1A30}
+Name = "PI1M 766x480 @ 32Hz"
+HWRev = (2100..2199)
+FWRev = (2800..2999)
+Channels = 1
+In = 766 480 32
+Out = 764 480 32
+SFrames = 1
+Def = (0 7 d:764 m:2)(5362 473 d:764 s:2)
+[Format end]
+# -----------------------------------------------------------------------------
+[Format]
+# this format is deprecated and replaced by {059ED012-F163-4107-900E-3133D10B95A6}
+Guid = {DE84F4AD-9E5C-482A-9CFA-568C3ECF559B}
+Name = "PI1M 72x56 @ 1000Hz"
+HWRev = (2100..2199)
+FWRev = (2800..2817)
+Channels = 1
+In = 73 224 250
+#IR:
+Out = 72 56 1000
+SFrames = 4
+Def = (0 14 d:72 m:1)(1022 42 d:72 s:1)
+Def = (4088 14 d:72 m:1)(5110 42 d:72 s:1)
+Def = (8176 14 d:72 m:1)(9198 42 d:72 s:1)
+Def = (12264 14 d:72 m:1)(13286 42 d:72 s:1)
+[Format end]
+# -----------------------------------------------------------------------------
+[Format]
+# this format replaces {DE84F4AD-9E5C-482A-9CFA-568C3ECF559B}
+Guid = {059ED012-F163-4107-900E-3133D10B95A6}
+Name = "PI1M 72x56 @ 1000Hz"
+HWRev = (2100..2199)
+FWRev = (2818..2819)
+Channels = 1
+In = 74 224 250
+#IR:
+Out = 72 56 1000
+SFrames = 4
+Def = (0 14 d:72 m:1 s:1)(1036 42 d:72 s:2)
+Def = (4144 14 d:72 m:1 s:1)(5180 42 d:72 s:2)
+Def = (8288 14 d:72 m:1 s:1)(9324 42 d:72 s:2)
+Def = (12432 14 d:72 m:1 s:1)(13468 42 d:72 s:2)
+[Format end]
+# -----------------------------------------------------------------------------
+[Format]
+# this format is deprecated and replaced by {5ACC0AD8-666B-4AB4-87FF-8A1CBE3C1AB4}
+Guid = {5A4D772D-1A69-4D00-BD5D-FF49DB3AAFB7}
+Name = "PI1M 70x56 @ 996Hz"
+HWRev = (2100..2199)
+FWRev = (2800..2817)
+Channels = 1
+In = 71 224 249
+#IR:
+Out = 70 56 996
+SFrames = 4
+Def = (0 14 d:70 m:1)(994 42 d:70 s:1)
+Def = (3976 14 d:70 m:1)(4970 42 d:70 s:1)
+Def = (7952 14 d:70 m:1)(8946 42 d:70 s:1)
+Def = (11928 14 d:70 m:1)(12922 42 d:70 s:1)
+[Format end]
+# -----------------------------------------------------------------------------
+[Format]
+# this format replaces {5A4D772D-1A69-4D00-BD5D-FF49DB3AAFB7}
+Guid = {5ACC0AD8-666B-4AB4-87FF-8A1CBE3C1AB4}
+Name = "PI1M 70x56 @ 996Hz"
+HWRev = (2100..2199)
+FWRev = (2818..2999)
+Channels = 1
+In = 72 224 249
+#IR:
+Out = 70 56 996
+SFrames = 4
+Def = (0 14 d:70 m:1 s:1)(1008 42 d:70 s:2)
+Def = (4032 14 d:70 m:1 s:1)(5040 42 d:70 s:2)
+Def = (8064 14 d:70 m:1 s:1)(9072 42 d:70 s:2)
+Def = (12096 14 d:70 m:1 s:1)(13104 42 d:70 s:2)
+[Format end]
+# -----------------------------------------------------------------------------
+[Format]
+# this format is deprecated and replaced by {C63DC877-9F46-419A-9BF1-7C8343C18073}
+# this format was valid for test purposes for FW2818 only
+# later FW2818 is supported by GUID {059ED012-F163-4107-900E-3133D10B95A6}
+Guid = {DE84F4AD-9E5C-482A-9CFA-568C3ECF559B}
+Name = "PI1M 72x56 @ 1000Hz flex"
+HWRev = (2100..2199)
+FWRev = (2818..2818)
+Channels = 1
+In = 73 224 250
+#IR:
+Out = 72 56 1000
+SFrames = 4
+Def = (0 14 d:72 m:1)(1022 42 d:72 s:1)
+Def = (4088 14 d:72 m:1)(5110 42 d:72 s:1)
+Def = (8176 14 d:72 m:1)(9198 42 d:72 s:1)
+Def = (12264 14 d:72 m:1)(13286 42 d:72 s:1)
+DeviceRes = 764 480 32
+[Format end]
+# -----------------------------------------------------------------------------
+[Format]
+# this format replaces {DE84F4AD-9E5C-482A-9CFA-568C3ECF559B}
+Guid = {C63DC877-9F46-419A-9BF1-7C8343C18073}
+Name = "PI1M 72x56 @ 1000Hz flex"
+HWRev = (2101..2199)
+FWRev = (2820..2999)
+Channels = 1
+In = 74 224 250
+#IR:
+Out = 72 56 1000
+SFrames = 4
+Def = (0 14 d:72 m:1 s:1)(1036 42 d:72 s:2)
+Def = (4144 14 d:72 m:1 s:1)(5180 42 d:72 s:2)
+Def = (8288 14 d:72 m:1 s:1)(9324 42 d:72 s:2)
+Def = (12432 14 d:72 m:1 s:1)(13468 42 d:72 s:2)
+DeviceRes = 764 480 32
+[Format end]
+# -----------------------------------------------------------------------------
+[Format]
+Guid = {A79EC978-5FD9-4B9F-B651-553CF545C8E7}
+Name = "PI1M 764x8 @ 1000Hz flex"
+HWRev = (2100..2199)
+FWRev = (2800..2999)
+Channels = 1
+In = 768 32 250
+#IR:
+Out = 764 8 1000
+SFrames = 4
+Def = (0 3 d:764 m:4)(2304 1 d:764 m:2 s:2)(3072 4 d:764 s:4) 
+Def = (6144 3 d:764 m:4)(8448 1 d:764 m:2 s:2)(9216 4 d:764 s:4) 
+Def = (12288 3 d:764 m:4)(14592 1 d:764 m:2 s:2)(15360 4 d:764 s:4) 
+Def = (18432 3 d:764 m:4)(20736 1 d:764 m:2 s:2)(21504 4 d:764 s:4) 
+DeviceRes = 764 480 32
+[Format end]
+# -----------------------------------------------------------------------------
+
+
+# -----------------------------------------------------------------------------
+#
+#       Xi80              ---- preliminary ----
+#
+# -----------------------------------------------------------------------------
+[Format]
+Guid = {9876f154-2247-4370-ae38-98f4e25e14b5}
+Name = "Xi 80x80 @ 50Hz"
+HWRev = (3000..3199)
+FWRev = (3000..3199)
+Channels = 1
+In = 80 82 50
+Out = 80 80 50
+SFrames = 1
+Def = (0 80 d:80)(6400 1 m:80 s:80)
+[Format end]
+# -----------------------------------------------------------------------------
+#
+#       Xi400
+#
+# -----------------------------------------------------------------------------
+[Format]
+Guid = {EEB9B31F-B21C-4117-AEF1-D841CFCB3536}
+Name = "XI400 382x290 @ 27Hz"
+HWRev = (3400..3599)
+FWRev = (3400..3599)
+Channels = 1
+In = 382 290 27
+Out = 382 288 27
+SFrames = 1
+Def = (0 288 d:382)(110398 1 m:382)
+[Format end]
+# -----------------------------------------------------------------------------
+[Format]
+Guid = {D0307142-3DAA-4225-93A4-71367ED50DA1}
+Name = "XI400 382x288 @ 80Hz"
+HWRev = (3400..3599)
+FWRev = (3400..3599)
+Channels = 1
+In = 384 288 80
+Out = 382 288 80
+SFrames = 1
+Def = (0 288 d:382 m:1 s:1)
+[Format end]
+
+
+# -----------------------------------------------------------------------------
+# Description:
+
+# [ImgProc format definition file] First Line that signalizes it is our file
+# Version = x		x = Version of the format of this file		
+
+# [Format]          Format tag
+# [Format end]      Format end tag
+# Guid = {x}        x = a unique identifier in curly brackets
+# Name = "x"        x = a userfriendly name in quote signes
+# HWRev = (x1..x2)  ranges od hardware revisions allowed to handle this format
+# FWRev = (x1..x2)  ranges od firmware revisions allowed to handle this format
+# Channels = x      x = number of output channels (1 = IR only, 2 = IR+Visible)
+#                   according to this number the format is defined x-times (starting with the Out parameter)
+# In = x y          Input resolution (x = width, y = height)
+# Out = x y         Output resolution of this output channel (x = width, y = height)
+# SFrames = 1       x = Number of subframes of this output channel 
+# Def = (offs n f0:x0 f1:x1 ... fn:xn) 
+#                   Definition of a subframe
+#                   offs = pixel offset in the input frame
+#                   n = number of repitions of the following sequence that must be read from the input frame
+#                   f0 = format of the first x0 bytes read from the input frame
+#                   s = Skip, data from the input buffer that has to be skipped
+#                   d = data, data from the input buffer that is image data
+#                   m = metadata, data from the input buffer that is meta data
+#                    ...
+#                   fn = format of the last xn bytes read from the input frame (according to n)
+# Def = (offs1 n ... fn:xn)(offs2 m ... fm:xm)
+#                   The Def parameter can also contain more than one block
+#                   In this case the second offset is also relative to pixel 0 in the input buffer
+# DeviceRes = x y   This Parameter is optional: If defined it is the formal device resolution.
+#                   The resolution of the "Out"-parameter is just a clipped array of it.
