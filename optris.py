@@ -1,4 +1,4 @@
-from ctypes import CDLL, c_int, byref
+from ctypes import CDLL, c_int, c_float, byref
 
 lib = CDLL('.\\libirimager.dll')
 
@@ -11,14 +11,12 @@ def tcp_init(ip: str, port: int) -> int:
 def terminate() -> int:
     return lib.evo_irimager_terminate(None)
 
-# __IRDIRECTSDK_API__ int evo_irimager_get_thermal_image_size(int* w, int* h);
 def get_thermal_image_size() -> (int, int):
     width = c_int()
     height = c_int()
     _ = lib.evo_irimager_get_thermal_image_size(byref(width), byref(height))
     return width.value, height.value
 
-# __IRDIRECTSDK_API__ int evo_irimager_get_palette_image_size(int* w, int* h);
 def get_palette_image_size() -> (int, int):
     width = c_int()
     height = c_int()
@@ -31,29 +29,42 @@ def get_palette_image_size() -> (int, int):
 
 # __IRDIRECTSDK_API__ int evo_irimager_get_thermal_palette_image(int w_t, int h_t, unsigned short* data_t, int w_p, int h_p, unsigned char* data_p );
 
-# __IRDIRECTSDK_API__ int evo_irimager_set_palette(int id);
+def set_palette(id: int) -> int:
+    return lib.evo_irimager_set_palette(id)
 
-# __IRDIRECTSDK_API__ int evo_irimager_set_palette_scale(int scale);
+def set_palette_scale(scale: int) -> int:
+    return lib.evo_irimager_set_palette_scale(scale)
 
-# __IRDIRECTSDK_API__ int evo_irimager_set_shutter_mode(int mode);
+def set_shutter_mode(mode: int) -> int:
+    return lib.evo_irimager_set_shutter_mode(mode)
 
-# __IRDIRECTSDK_API__ int evo_irimager_trigger_shutter_flag();
+def trigger_shutter_flag() -> int:
+    return lib.evo_irimager_trigger_shutter_flag(None)
 
-# __IRDIRECTSDK_API__ int evo_irimager_set_temperature_range(int t_min, int t_max);
+def set_temperature_range(min: int, max: int) -> int:
+    return lib.evo_irimager_set_temperature_range(min, max)
 
-# __IRDIRECTSDK_API__ int evo_irimager_set_radiation_parameters(float emissivity, float transmissivity, float tAmbient);
+def set_radiation_parameters(emissivity: float, transmissivity: float, ambientTemperature: float) -> int:
+    return lib.evo_irimager_set_radiation_parameters(emissivity, transmissivity, ambientTemperature)
 
 # __IRDIRECTSDK_API__ int evo_irimager_to_palette_save_png(unsigned short* thermal_data, int w, int h, const char* path, int palette, int palette_scale);
 
-# __IRDIRECTSDK_API__ int evo_irimager_set_focusmotor_pos(float pos);
+def set_focusmotor_pos(position: float) -> int:
+    return lib.evo_irimager_set_focusmotor_pos(position)
 
-# __IRDIRECTSDK_API__ int evo_irimager_get_focusmotor_pos(float *posOut);
+def get_focusmotor_pos() -> float:
+    position = c_float()
+    _ = lib.evo_irimager_get_focusmotor_pos(byref(position))
+    return position.value
 
-# __IRDIRECTSDK_API__ int evo_irimager_daemon_launch();
+def daemon_launch() -> int:
+    return lib.evo_irimager_daemon_launch(None)
 
-# __IRDIRECTSDK_API__ int evo_irimager_daemon_is_running();
+def daemon_is_running() -> int:
+    return lib.evo_irimager_daemon_is_running(None)
 
-# __IRDIRECTSDK_API__ int evo_irimager_daemon_kill();
+def daemon_kill() -> int:
+    return lib.evo_irimager_daemon_kill(None)
 
 usb_init('.\\generic.xml')
 w, h = get_thermal_image_size()
