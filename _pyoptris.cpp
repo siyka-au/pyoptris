@@ -11,11 +11,11 @@
  * __IRDIRECTSDK_API__ int evo_irimager_usb_init(const char* xml_config, const char* formats_def, const char* log_file);
  * 
  */
-PyObject* usb_init(PyObject *, PyObject* args) {
+PyObject* usb_init(PyObject *, PyObject *args) {
     const char* xml_config;
     const char* formats_def;
     const char* log_file;
-    if (!PyArg_ParseTuple(args, "szz", &xml_config, &formats_def, &log_file)) {
+    if (!PyArg_ParseTuple(args, "s|zz", &xml_config, &formats_def, &log_file)) {
         PyErr_SetString(PyExc_RuntimeError, "Bad argument(s)");
         return NULL;
     }
@@ -43,7 +43,7 @@ PyObject* usb_init(PyObject *, PyObject* args) {
  * __IRDIRECTSDK_API__ int evo_irimager_tcp_init(const char* ip, int port);
  * 
  */
-PyObject* tcp_init(PyObject *, PyObject* args) {
+PyObject* tcp_init(PyObject *, PyObject *args) {
     const char* ip;
     int port;
     if (!PyArg_ParseTuple(args, "si", &ip, &port)) {
@@ -76,7 +76,7 @@ PyObject* tcp_init(PyObject *, PyObject* args) {
  * __IRDIRECTSDK_API__ int evo_irimager_terminate();
  * 
  */
-PyObject* terminate(PyObject *, PyObject* o) {
+PyObject* terminate(PyObject *, PyObject *) {
     int ok = evo_irimager_terminate();
     switch(ok) {
         case 0:
@@ -101,7 +101,7 @@ PyObject* terminate(PyObject *, PyObject* o) {
  * __IRDIRECTSDK_API__ int evo_irimager_get_thermal_image_size(int* w, int* h);
  * 
  */
-PyObject* get_thermal_image_size(PyObject *, PyObject* o) {
+PyObject* get_thermal_image_size(PyObject *, PyObject *) {
     int width, height;
     int ok = evo_irimager_get_thermal_image_size(&width, &height);
     switch(ok) {
@@ -127,10 +127,21 @@ PyObject* get_thermal_image_size(PyObject *, PyObject* o) {
  * __IRDIRECTSDK_API__ int evo_irimager_get_palette_image_size(int* w, int* h);
  * 
  */
-PyObject* get_palette_image_size(PyObject *, PyObject* o) {
-    double x = PyFloat_AsDouble(o);
-    double result = 5;
-    return PyFloat_FromDouble(result);
+PyObject* get_palette_image_size(PyObject *, PyObject *) {
+    int width, height;
+    int ok = evo_irimager_get_palette_image_size(&width, &height);
+    switch(ok) {
+        case 0:
+            return Py_BuildValue("ii", width, height);
+        
+        case -1:
+            PyErr_SetString(PyExc_RuntimeError, "Error");
+            break;
+        
+        default:
+            PyErr_SetString(PyExc_RuntimeError, "Unknown error");
+    }
+    return NULL;
 }
 
 /**
@@ -145,8 +156,8 @@ PyObject* get_palette_image_size(PyObject *, PyObject* o) {
  * __IRDIRECTSDK_API__ int evo_irimager_get_thermal_image(int* w, int* h, unsigned short* data);
  * 
  */
-PyObject* get_thermal_image(PyObject *, PyObject* o) {
-    double x = PyFloat_AsDouble(o);
+PyObject* get_thermal_image(PyObject *, PyObject *args) {
+    double x = PyFloat_AsDouble(args);
     double result = 6;
     return PyFloat_FromDouble(result);
 }
@@ -162,8 +173,8 @@ PyObject* get_thermal_image(PyObject *, PyObject* o) {
  * __IRDIRECTSDK_API__ int evo_irimager_get_palette_image(int* w, int* h, unsigned char* data);
  * 
  */
-PyObject* get_palette_image(PyObject *, PyObject* o) {
-    double x = PyFloat_AsDouble(o);
+PyObject* get_palette_image(PyObject *, PyObject *args) {
+    double x = PyFloat_AsDouble(args);
     double result = 7;
     return PyFloat_FromDouble(result);
 }
@@ -203,6 +214,11 @@ PyObject* get_palette_image(PyObject *, PyObject* o) {
  * __IRDIRECTSDK_API__ int evo_irimager_set_palette(int id);
  * 
  */
+PyObject* set_palette(PyObject *, PyObject* args) {
+    double x = PyFloat_AsDouble(o);
+    double result = 7;
+    return PyFloat_FromDouble(result);
+}
 
 /**
  * @brief sets palette scaling method
@@ -217,6 +233,11 @@ PyObject* get_palette_image(PyObject *, PyObject* o) {
  * __IRDIRECTSDK_API__ int evo_irimager_set_palette_scale(int scale);
  * 
  */
+PyObject* set_palette_scale(PyObject *, PyObject* args) {
+    double x = PyFloat_AsDouble(o);
+    double result = 7;
+    return PyFloat_FromDouble(result);
+}
 
 /**
  * @brief sets shutter flag control mode
@@ -304,15 +325,6 @@ PyObject* get_palette_image(PyObject *, PyObject* o) {
  * 
  */
 
-/* PYBIND11_MODULE(example, m) {
-    m.doc() = "pyoptris";
-
-    m.def("fast_sinh", &sinh_py_impl, "sinh");
-    m.def("fast_cosh", &cosh_py_impl, "cosh");
-    m.def("fast_tanh", &tanh_py_impl, "tanh");
-
-} */
-
 static PyMethodDef pyoptris_methods[] = {
     // The first property is the name exposed to Python, fast_tanh, the second is the C++
     // function name that contains the implementation.
@@ -323,17 +335,29 @@ static PyMethodDef pyoptris_methods[] = {
     { "get_palette_image_size", (PyCFunction) get_palette_image_size, METH_NOARGS, nullptr },
     { "get_thermal_image",      (PyCFunction) get_thermal_image,      METH_NOARGS, nullptr },
     { "get_palette_image",      (PyCFunction) get_palette_image,      METH_NOARGS, nullptr },
+    { "set_palette",            (PyCFunction) set_palette,            METH_O, nullptr },
+    { "get_palette_image",      (PyCFunction) get_palette_image,      METH_NOARGS, nullptr },
+
     
     // Terminate the array with an object containing nulls.
     { nullptr, nullptr, 0, nullptr }
 };
 
+void _pyoptris_free(void *p) {
+    evo_irimager_terminate();
+}
+
+// https://docs.python.org/3.4/c-api/module.html
 static PyModuleDef pyoptris_module = {
     PyModuleDef_HEAD_INIT,
-    "pyoptris",                        // Module name to use with Python import statements
-    "Provides some functions, but faster",  // Module description
+    "pyoptris",
+    "Provides some functions, but faster",
     0,
-    pyoptris_methods                   // Structure that defines the methods of the module
+    pyoptris_methods,
+    NULL,
+    NULL,
+    NULL,
+    _pyoptris_free
 };
 
 PyMODINIT_FUNC PyInit_pyoptris() {

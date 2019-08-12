@@ -125,3 +125,6 @@ dmypy.json
 
 *.code-workspace
 .vscode/*
+
+log.txt
+*.dll

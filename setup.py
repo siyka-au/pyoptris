@@ -16,6 +16,7 @@ pyoptris = Extension( "pyoptris",
     [ "_pyoptris.cpp" ],
     include_dirs=[ ".", optrisInclude ],
     library_dirs=[ optrisLib ],
+    libraries=[ 'libirimager' ],
     language='c++',
 )
 
