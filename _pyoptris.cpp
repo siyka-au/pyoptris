@@ -1,5 +1,5 @@
 #include <Python.h>
-#include <pyoptris.h>
+#include <direct_binding.h>
 
 /**
  * @brief Initializes an IRImager instance connected to this computer via USB
@@ -11,10 +11,27 @@
  * __IRDIRECTSDK_API__ int evo_irimager_usb_init(const char* xml_config, const char* formats_def, const char* log_file);
  * 
  */
-PyObject* usb_init(PyObject *, PyObject* o) {
-    double x = PyFloat_AsDouble(o);
-    double result = 1;
-    return PyFloat_FromDouble(result);
+PyObject* usb_init(PyObject *, PyObject* args) {
+    const char* xml_config;
+    const char* formats_def;
+    const char* log_file;
+    if (!PyArg_ParseTuple(args, "szz", &xml_config, &formats_def, &log_file)) {
+        PyErr_SetString(PyExc_RuntimeError, "Bad argument(s)");
+        return NULL;
+    }
+    int ok = evo_irimager_usb_init(xml_config, formats_def, log_file);
+    switch(ok) {
+        case 0:
+            Py_RETURN_NONE;
+        
+        case -1:
+            PyErr_SetString(PyExc_RuntimeError, "Error");
+            break;
+
+        default:
+            PyErr_SetString(PyExc_RuntimeError, "Unknown error");
+    }
+    return NULL;
 }
 
 /**
@@ -26,10 +43,30 @@ PyObject* usb_init(PyObject *, PyObject* o) {
  * __IRDIRECTSDK_API__ int evo_irimager_tcp_init(const char* ip, int port);
  * 
  */
-PyObject* tcp_init(PyObject *, PyObject* o) {
-    double x = PyFloat_AsDouble(o);
-    double result = 2;
-    return PyFloat_FromDouble(result);
+PyObject* tcp_init(PyObject *, PyObject* args) {
+    const char* ip;
+    int port;
+    if (!PyArg_ParseTuple(args, "si", &ip, &port)) {
+        PyErr_SetString(PyExc_RuntimeError, "Bad argument(s)");
+        return NULL;
+    }
+    int ok = evo_irimager_tcp_init(ip, port);
+    switch(ok) {
+        case 0:
+            Py_RETURN_NONE;
+        
+        case -1:
+            PyErr_SetString(PyExc_RuntimeError, "Host not found");
+            break;
+        
+        case -2:
+            PyErr_SetString(PyExc_RuntimeError, "Fatal error");
+            break;
+        
+        default:
+            PyErr_SetString(PyExc_RuntimeError, "Unknown error");
+    }
+    return NULL;
 }
 
 /**
@@ -40,9 +77,19 @@ PyObject* tcp_init(PyObject *, PyObject* o) {
  * 
  */
 PyObject* terminate(PyObject *, PyObject* o) {
-    double x = PyFloat_AsDouble(o);
-    double result = 3;
-    return PyFloat_FromDouble(result);
+    int ok = evo_irimager_terminate();
+    switch(ok) {
+        case 0:
+            Py_RETURN_NONE;
+        
+        case -1:
+            PyErr_SetString(PyExc_RuntimeError, "Error");
+            break;
+        
+        default:
+            PyErr_SetString(PyExc_RuntimeError, "Unknown error");
+    }
+    return NULL;
 }
 
 /**
@@ -55,9 +102,20 @@ PyObject* terminate(PyObject *, PyObject* o) {
  * 
  */
 PyObject* get_thermal_image_size(PyObject *, PyObject* o) {
-    double x = PyFloat_AsDouble(o);
-    double result = 4;
-    return PyFloat_FromDouble(result);
+    int width, height;
+    int ok = evo_irimager_get_thermal_image_size(&width, &height);
+    switch(ok) {
+        case 0:
+            return Py_BuildValue("ii", width, height);
+        
+        case -1:
+            PyErr_SetString(PyExc_RuntimeError, "Error");
+            break;
+        
+        default:
+            PyErr_SetString(PyExc_RuntimeError, "Unknown error");
+    }
+    return NULL;
 }
 
 /**
@@ -258,13 +316,13 @@ PyObject* get_palette_image(PyObject *, PyObject* o) {
 static PyMethodDef pyoptris_methods[] = {
     // The first property is the name exposed to Python, fast_tanh, the second is the C++
     // function name that contains the implementation.
-    { "usb_init", (PyCFunction)usb_init, METH_O, nullptr },
-    { "tcp_init", (PyCFunction)tcp_init, METH_O, nullptr },
-    { "terminate", (PyCFunction)terminate, METH_NOARGS, nullptr },
-    { "get_thermal_image_size", (PyCFunction)get_thermal_image_size, METH_NOARGS, nullptr },
-    { "get_palette_image_size", (PyCFunction)get_palette_image_size, METH_NOARGS, nullptr },
-    { "get_thermal_image", (PyCFunction)get_thermal_image, METH_NOARGS, nullptr },
-    { "get_palette_image", (PyCFunction)get_palette_image, METH_NOARGS, nullptr },
+    { "usb_init",               (PyCFunction) usb_init,               METH_VARARGS, nullptr },
+    { "tcp_init",               (PyCFunction) tcp_init,               METH_VARARGS, nullptr },
+    { "terminate",              (PyCFunction) terminate,              METH_NOARGS, nullptr },
+    { "get_thermal_image_size", (PyCFunction) get_thermal_image_size, METH_NOARGS, nullptr },
+    { "get_palette_image_size", (PyCFunction) get_palette_image_size, METH_NOARGS, nullptr },
+    { "get_thermal_image",      (PyCFunction) get_thermal_image,      METH_NOARGS, nullptr },
+    { "get_palette_image",      (PyCFunction) get_palette_image,      METH_NOARGS, nullptr },
     
     // Terminate the array with an object containing nulls.
     { nullptr, nullptr, 0, nullptr }
