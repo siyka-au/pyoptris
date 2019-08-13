@@ -29,7 +29,7 @@ PyObject* usb_init(PyObject *, PyObject *args) {
             break;
 
         default:
-            Py_UNREACHABLE();
+            abort();
     }
     return NULL;
 }
@@ -64,7 +64,7 @@ PyObject* tcp_init(PyObject *, PyObject *args) {
             break;
         
         default:
-            Py_UNREACHABLE();
+            abort();
     }
     return NULL;
 }
@@ -87,7 +87,7 @@ PyObject* terminate(PyObject *, PyObject *) {
             break;
         
         default:
-            Py_UNREACHABLE();
+            abort();
     }
     return NULL;
 }
@@ -113,7 +113,7 @@ PyObject* get_thermal_image_size(PyObject *, PyObject *) {
             break;
         
         default:
-            Py_UNREACHABLE();
+            abort();
     }
     return NULL;
 }
@@ -139,7 +139,7 @@ PyObject* get_palette_image_size(PyObject *, PyObject *) {
             break;
         
         default:
-            Py_UNREACHABLE();
+            abort();
     }
     return NULL;
 }
@@ -158,9 +158,9 @@ PyObject* get_palette_image_size(PyObject *, PyObject *) {
  */
 PyObject* get_thermal_image(PyObject *, PyObject *) {
     int ok = 0;// = evo_irimager_get_thermal_image_size(&width, &height);
+    double result = 6;
     switch(ok) {
         case 0:
-            double result = 6;
             return PyFloat_FromDouble(result);
         
         case -1:
@@ -172,7 +172,7 @@ PyObject* get_thermal_image(PyObject *, PyObject *) {
             break;
         
         default:
-            Py_UNREACHABLE();
+            abort();
     }
     return NULL;
 }
@@ -189,10 +189,10 @@ PyObject* get_thermal_image(PyObject *, PyObject *) {
  * 
  */
 PyObject* get_palette_image(PyObject *, PyObject *) {
-    int ok = 0;// = evo_irimager_get_thermal_image_size(&width, &height);
+    int ok = = evo_irimager_get_thermal_image_size(&width, &height);
+    double result = 7;
     switch(ok) {
         case 0:
-            double result = 7;
             return PyFloat_FromDouble(result);
         
         case -1:
@@ -204,7 +204,7 @@ PyObject* get_palette_image(PyObject *, PyObject *) {
             break;
         
         default:
-            Py_UNREACHABLE();
+            abort();
     }
     return NULL;
 }
@@ -225,9 +225,9 @@ PyObject* get_palette_image(PyObject *, PyObject *) {
  */
 PyObject* get_thermal_palette_image(PyObject *, PyObject *) {
     int ok = 0;// = evo_irimager_get_thermal_image_size(&width, &height);
+    double result = 8;
     switch(ok) {
         case 0:
-            double result = 8;
             return PyFloat_FromDouble(result);
         
         case -1:
@@ -239,7 +239,7 @@ PyObject* get_thermal_palette_image(PyObject *, PyObject *) {
             break;
         
         default:
-            Py_UNREACHABLE();
+            abort();
     }
     return NULL;
 }
@@ -253,9 +253,9 @@ PyObject* get_thermal_palette_image(PyObject *, PyObject *) {
  */
 PyObject* save_palette_to_png(PyObject *, PyObject *args) {
     int ok = 0;// = evo_irimager_get_thermal_image_size(&width, &height);
+    double result = 6;
     switch(ok) {
         case 0:
-            double result = 6;
             return PyFloat_FromDouble(result);
         
         case -1:
@@ -263,7 +263,7 @@ PyObject* save_palette_to_png(PyObject *, PyObject *args) {
             break;
         
         default:
-            Py_UNREACHABLE();
+            abort();
     }
     return NULL;
 }
@@ -309,7 +309,7 @@ PyObject* set_palette(PyObject *, PyObject* args) {
             break;
         
         default:
-            Py_UNREACHABLE();
+            abort();
     }
     return NULL;
 }
@@ -348,7 +348,7 @@ PyObject* set_palette_scale(PyObject *, PyObject* args) {
             break;
         
         default:
-            Py_UNREACHABLE();
+            abort();
     }
     return NULL;
 }
@@ -382,7 +382,7 @@ PyObject* set_shutter_mode(PyObject *, PyObject* args) {
             break;
         
         default:
-            Py_UNREACHABLE();
+            abort();
     }
     return NULL;
 }
@@ -409,7 +409,7 @@ PyObject* trigger_shutter_flag(PyObject *, PyObject *) {
             break;
         
         default:
-            Py_UNREACHABLE();
+            abort();
     }
     return NULL;
 }
@@ -441,7 +441,7 @@ PyObject* set_temperature_range(PyObject *, PyObject *args) {
             break;
         
         default:
-            Py_UNREACHABLE();
+            abort();
     }
     return NULL;
 }
@@ -476,7 +476,7 @@ PyObject* set_radiation_parameters(PyObject *, PyObject *args) {
             break;
         
         default:
-            Py_UNREACHABLE();
+            abort();
     }
     return NULL;
 }
@@ -505,7 +505,7 @@ PyObject* set_focus_motor_position(PyObject *, PyObject *args) {
             break;
         
         default:
-            Py_UNREACHABLE();
+            abort();
     }
     return NULL;
 }
@@ -520,7 +520,7 @@ PyObject* set_focus_motor_position(PyObject *, PyObject *args) {
  */
 PyObject* get_focus_motor_position(PyObject *, PyObject *) {
     float position;
-    int ok = evo_irimager_get_focusmotor_pos(position);
+    int ok = evo_irimager_get_focusmotor_pos(&position);
     switch(ok) {
         case 0:
             return Py_BuildValue("f", position);
@@ -530,7 +530,7 @@ PyObject* get_focus_motor_position(PyObject *, PyObject *) {
             break;
         
         default:
-            Py_UNREACHABLE();
+            abort();
     }
     return NULL;
 }
@@ -557,7 +557,7 @@ PyObject* daemon_launch(PyObject *, PyObject *) {
             break;
             
         default:
-            Py_UNREACHABLE();
+            abort();
     }
     return NULL;
 }
@@ -579,7 +579,7 @@ PyObject* daemon_is_running(PyObject *, PyObject *) {
             Py_RETURN_FALSE;
         
         default:
-            Py_UNREACHABLE();
+            abort();
     }
     return NULL;
 }
@@ -606,7 +606,7 @@ PyObject* daemon_kill(PyObject *, PyObject *) {
             break;
         
         default:
-            Py_UNREACHABLE();
+            abort();
     }
     return NULL;
 }
@@ -621,12 +621,12 @@ static PyMethodDef pyoptris_methods[] = {
     { "get_palette_image",          (PyCFunction) get_palette_image,            METH_NOARGS, nullptr },
     { "get_thermal_palette_image",  (PyCFunction) get_thermal_palette_image,    METH_NOARGS, nullptr },
     { "save_palette_to_png",        (PyCFunction) save_palette_to_png,          METH_VARARGS, nullptr },
-    { "set_palette",                (PyCFunction) set_palette,                  METH_O, nullptr },
-    { "set_palette_scale",          (PyCFunction) set_palette_scale,            METH_O, nullptr },
+    { "set_palette",                (PyCFunction) set_palette,                  METH_VARARGS, nullptr },
+    { "set_palette_scale",          (PyCFunction) set_palette_scale,            METH_VARARGS, nullptr },
     { "trigger_shutter_flag",       (PyCFunction) trigger_shutter_flag,         METH_NOARGS, nullptr },
     { "set_temperature_range",      (PyCFunction) set_temperature_range,        METH_VARARGS, nullptr },
     { "set_radiation_parameters",   (PyCFunction) set_radiation_parameters,     METH_VARARGS, nullptr },
-    { "set_focus_motor_position",   (PyCFunction) set_focus_motor_position,     METH_O, nullptr },
+    { "set_focus_motor_position",   (PyCFunction) set_focus_motor_position,     METH_VARARGS, nullptr },
     { "get_focus_motor_position",   (PyCFunction) get_focus_motor_position,     METH_NOARGS, nullptr },
     { "daemon_launch",              (PyCFunction) daemon_launch,                METH_NOARGS, nullptr },
     { "daemon_is_running",          (PyCFunction) daemon_is_running,            METH_NOARGS, nullptr },
