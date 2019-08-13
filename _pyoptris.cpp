@@ -29,7 +29,7 @@ PyObject* usb_init(PyObject *, PyObject *args) {
             break;
 
         default:
-            PyErr_SetString(PyExc_RuntimeError, "Unknown error");
+            Py_UNREACHABLE();
     }
     return NULL;
 }
@@ -64,7 +64,7 @@ PyObject* tcp_init(PyObject *, PyObject *args) {
             break;
         
         default:
-            PyErr_SetString(PyExc_RuntimeError, "Unknown error");
+            Py_UNREACHABLE();
     }
     return NULL;
 }
@@ -87,7 +87,7 @@ PyObject* terminate(PyObject *, PyObject *) {
             break;
         
         default:
-            PyErr_SetString(PyExc_RuntimeError, "Unknown error");
+            Py_UNREACHABLE();
     }
     return NULL;
 }
@@ -113,7 +113,7 @@ PyObject* get_thermal_image_size(PyObject *, PyObject *) {
             break;
         
         default:
-            PyErr_SetString(PyExc_RuntimeError, "Unknown error");
+            Py_UNREACHABLE();
     }
     return NULL;
 }
@@ -139,7 +139,7 @@ PyObject* get_palette_image_size(PyObject *, PyObject *) {
             break;
         
         default:
-            PyErr_SetString(PyExc_RuntimeError, "Unknown error");
+            Py_UNREACHABLE();
     }
     return NULL;
 }
@@ -156,8 +156,24 @@ PyObject* get_palette_image_size(PyObject *, PyObject *) {
  * __IRDIRECTSDK_API__ int evo_irimager_get_thermal_image(int* w, int* h, unsigned short* data);
  * 
  */
-PyObject* get_thermal_image(PyObject *, PyObject *args) {
-    double x = PyFloat_AsDouble(args);
+PyObject* get_thermal_image(PyObject *, PyObject *) {
+    int ok;// = evo_irimager_get_thermal_image_size(&width, &height);
+    switch(ok) {
+        case 0:
+            return Py_BuildValue("ii", width, height);
+        
+        case -1:
+            PyErr_SetString(PyExc_RuntimeError, "Error");
+            break;
+        
+        case -2:
+            PyErr_SetString(PyExc_RuntimeError, "Fatal error");
+            break;
+        
+        default:
+            Py_UNREACHABLE();
+    }
+    return NULL;
     double result = 6;
     return PyFloat_FromDouble(result);
 }
@@ -173,11 +189,11 @@ PyObject* get_thermal_image(PyObject *, PyObject *args) {
  * __IRDIRECTSDK_API__ int evo_irimager_get_palette_image(int* w, int* h, unsigned char* data);
  * 
  */
-PyObject* get_palette_image(PyObject *, PyObject *args) {
-    double x = PyFloat_AsDouble(args);
+PyObject* get_palette_image(PyObject *, PyObject *) {
     double result = 7;
     return PyFloat_FromDouble(result);
 }
+
 
 /**
  * @brief Accessor to an RGB palette image and a thermal image by reference
@@ -192,6 +208,43 @@ PyObject* get_palette_image(PyObject *, PyObject *args) {
  * __IRDIRECTSDK_API__ int evo_irimager_get_thermal_palette_image(int w_t, int h_t, unsigned short* data_t, int w_p, int h_p, unsigned char* data_p );
  * 
  */
+PyObject* get_thermal_palette_image(PyObject *, PyObject *) {
+    double result = 8;
+    return PyFloat_FromDouble(result);
+}
+
+/**
+ * @brief 
+ * @return error code: 0 on success, -1 on error
+ *
+ * __IRDIRECTSDK_API__ int evo_irimager_to_palette_save_png(unsigned short* thermal_data, int w, int h, const char* path, int palette, int palette_scale);
+ *
+ */
+PyObject* save_palette_to_png(PyObject *, PyObject *args) {
+    const char* ip;
+    int port;
+    if (!PyArg_ParseTuple(args, "si", &ip, &port)) {
+        PyErr_SetString(PyExc_RuntimeError, "Bad argument(s)");
+        return NULL;
+    }
+    int ok;// = evo_irimager_to_palette_save_png(ip, port);
+    switch(ok) {
+        case 0:
+            Py_RETURN_NONE;
+        
+        case -1:
+            PyErr_SetString(PyExc_RuntimeError, "Error");
+            break;
+        
+        case -2:
+            PyErr_SetString(PyExc_RuntimeError, "Fatal error");
+            break;
+        
+        default:
+            Py_UNREACHABLE();
+    }
+    return NULL;
+}
 
 /**
  * @brief sets palette format to daemon.
@@ -215,9 +268,28 @@ PyObject* get_palette_image(PyObject *, PyObject *args) {
  * 
  */
 PyObject* set_palette(PyObject *, PyObject* args) {
-    double x = PyFloat_AsDouble(o);
-    double result = 7;
-    return PyFloat_FromDouble(result);
+    int id;
+    if (!PyArg_ParseTuple(args, "i", &id)) {
+        PyErr_SetString(PyExc_RuntimeError, "Bad argument(s)");
+        return NULL;
+    }
+    int ok = evo_irimager_set_palette(id);
+    switch(ok) {
+        case 0:
+            Py_RETURN_NONE;
+        
+        case -1:
+            PyErr_SetString(PyExc_RuntimeError, "Error");
+            break;
+        
+        case -2:
+            PyErr_SetString(PyExc_RuntimeError, "Fatal error");
+            break;
+        
+        default:
+            Py_UNREACHABLE();
+    }
+    return NULL;
 }
 
 /**
@@ -234,9 +306,29 @@ PyObject* set_palette(PyObject *, PyObject* args) {
  * 
  */
 PyObject* set_palette_scale(PyObject *, PyObject* args) {
-    double x = PyFloat_AsDouble(o);
-    double result = 7;
-    return PyFloat_FromDouble(result);
+    int scale;
+    if (!PyArg_ParseTuple(args, "i", &scale)) {
+        PyErr_SetString(PyExc_RuntimeError, "Bad argument(s)");
+        return NULL;
+    }
+
+    int ok = evo_irimager_set_palette_scale(scale);
+    switch(ok) {
+        case 0:
+            Py_RETURN_NONE;
+        
+        case -1:
+            PyErr_SetString(PyExc_RuntimeError, "Error");
+            break;
+        
+        case -2:
+            PyErr_SetString(PyExc_RuntimeError, "Fatal error");
+            break;
+        
+        default:
+            Py_UNREACHABLE();
+    }
+    return NULL;
 }
 
 /**
@@ -247,6 +339,31 @@ PyObject* set_palette_scale(PyObject *, PyObject* args) {
  * __IRDIRECTSDK_API__ int evo_irimager_set_shutter_mode(int mode);
  * 
  */
+PyObject* set_shutter_mode(PyObject *, PyObject* args) {
+    int mode;
+    if (!PyArg_ParseTuple(args, "i", &mode)) {
+        PyErr_SetString(PyExc_RuntimeError, "Bad argument(s)");
+        return NULL;
+    }
+
+    int ok = evo_irimager_set_shutter_mode(mode);
+    switch(ok) {
+        case 0:
+            Py_RETURN_NONE;
+        
+        case -1:
+            PyErr_SetString(PyExc_RuntimeError, "Error");
+            break;
+        
+        case -2:
+            PyErr_SetString(PyExc_RuntimeError, "Fatal error");
+            break;
+        
+        default:
+            Py_UNREACHABLE();
+    }
+    return NULL;
+}
 
 /**
  * @brief forces a shutter flag cycle
@@ -255,6 +372,25 @@ PyObject* set_palette_scale(PyObject *, PyObject* args) {
  * __IRDIRECTSDK_API__ int evo_irimager_trigger_shutter_flag();
  * 
  */
+PyObject* trigger_shutter_flag(PyObject *, PyObject *) {
+    int ok = evo_irimager_trigger_shutter_flag();
+    switch(ok) {
+        case 0:
+            Py_RETURN_NONE;
+        
+        case -1:
+            PyErr_SetString(PyExc_RuntimeError, "Error");
+            break;
+
+        case -2:
+            PyErr_SetString(PyExc_RuntimeError, "Fatal error");
+            break;
+        
+        default:
+            Py_UNREACHABLE();
+    }
+    return NULL;
+}
 
 /**
  * @brief sets the minimum and maximum remperature range to the camera (also configurable in xml-config)
@@ -263,6 +399,30 @@ PyObject* set_palette_scale(PyObject *, PyObject* args) {
  * __IRDIRECTSDK_API__ int evo_irimager_set_temperature_range(int t_min, int t_max);
  * 
  */
+PyObject* set_temperature_range(PyObject *, PyObject *args) {
+    int minimumTemperature, maximumTemperature;
+    if (!PyArg_ParseTuple(args, "ii", &minimumTemperature, &maximumTemperature)) {
+        PyErr_SetString(PyExc_RuntimeError, "Bad argument(s)");
+        return NULL;
+    }
+    int ok = evo_irimager_set_temperature_range(minimumTemperature, maximumTemperature);
+    switch(ok) {
+        case 0:
+            Py_RETURN_NONE;
+        
+        case -1:
+            PyErr_SetString(PyExc_RuntimeError, "Error");
+            break;
+        
+        case -2:
+            PyErr_SetString(PyExc_RuntimeError, "Fatal error");
+            break;
+        
+        default:
+            Py_UNREACHABLE();
+    }
+    return NULL;
+}
 
 /**
  * @brief sets radiation properties, i.e. emissivity and transmissivity parameters (not implemented for TCP connection, usb mode only)
@@ -274,14 +434,30 @@ PyObject* set_palette_scale(PyObject *, PyObject* args) {
  * __IRDIRECTSDK_API__ int evo_irimager_set_radiation_parameters(float emissivity, float transmissivity, float tAmbient);
  * 
  */
-
-/**
- * @brief 
- * @return error code: 0 on success, -1 on error
- *
- * __IRDIRECTSDK_API__ int evo_irimager_to_palette_save_png(unsigned short* thermal_data, int w, int h, const char* path, int palette, int palette_scale);
- *
- */
+PyObject* set_radiation_parameters(PyObject *, PyObject *args) {
+    float emissivity, transmissivity, ambientTemperature;
+    if (!PyArg_ParseTuple(args, "fff", &emissivity, &transmissivity, &ambientTemperature)) {
+        PyErr_SetString(PyExc_RuntimeError, "Bad argument(s)");
+        return NULL;
+    }
+    int ok = evo_irimager_set_radiation_parameters(emissivity, transmissivity, ambientTemperature);
+    switch(ok) {
+        case 0:
+            Py_RETURN_NONE;
+        
+        case -1:
+            PyErr_SetString(PyExc_RuntimeError, "Error");
+            break;
+        
+        case -2:
+            PyErr_SetString(PyExc_RuntimeError, "Fatal error");
+            break;
+        
+        default:
+            Py_UNREACHABLE();
+    }
+    return NULL;
+}
 
 /**
  * @brief Set the position of the focusmotor
@@ -291,6 +467,26 @@ PyObject* set_palette_scale(PyObject *, PyObject* args) {
  * __IRDIRECTSDK_API__ int evo_irimager_set_focusmotor_pos(float pos);
  * 
  */
+PyObject* set_focus_motor_position(PyObject *, PyObject *args) {
+    float position;
+    if (!PyArg_ParseTuple(args, "f", &position)) {
+        PyErr_SetString(PyExc_RuntimeError, "Bad argument(s)");
+        return NULL;
+    }
+    int ok = evo_irimager_set_focusmotor_pos(position);
+    switch(ok) {
+        case 0:
+            Py_RETURN_NONE;
+        
+        case -1:
+            PyErr_SetString(PyExc_RuntimeError, "Error or no focus motor available");
+            break;
+        
+        default:
+            Py_UNREACHABLE();
+    }
+    return NULL;
+}
 
 /**
  * @brief Get the position of the focusmotor
@@ -300,6 +496,22 @@ PyObject* set_palette_scale(PyObject *, PyObject* args) {
  * __IRDIRECTSDK_API__ int evo_irimager_get_focusmotor_pos(float *posOut);
  * 
  */
+PyObject* get_focus_motor_position(PyObject *, PyObject *) {
+    float position;
+    int ok = evo_irimager_get_focusmotor_pos(position);
+    switch(ok) {
+        case 0:
+            return Py_BuildValue("f", position);
+
+        case -1:
+            PyErr_SetString(PyExc_RuntimeError, "Error or no focus motor available");
+            break;
+        
+        default:
+            Py_UNREACHABLE();
+    }
+    return NULL;
+}
 
 /**
  * Launch TCP daemon
@@ -308,6 +520,25 @@ PyObject* set_palette_scale(PyObject *, PyObject* args) {
  * __IRDIRECTSDK_API__ int evo_irimager_daemon_launch();
  * 
  */
+PyObject* daemon_launch(PyObject *, PyObject *) {
+    int ok = evo_irimager_daemon_launch();
+    switch(ok) {
+        case 0:
+            Py_RETURN_NONE;
+        
+        case -1:
+            PyErr_SetString(PyExc_RuntimeError, "Error");
+            break;
+        
+        case -2:
+            PyErr_SetString(PyExc_RuntimeError, "Fatal error");
+            break;
+            
+        default:
+            Py_UNREACHABLE();
+    }
+    return NULL;
+}
 
 /**
  * Check whether daemon is already running
@@ -316,6 +547,20 @@ PyObject* set_palette_scale(PyObject *, PyObject* args) {
  * __IRDIRECTSDK_API__ int evo_irimager_daemon_is_running();
  * 
  */
+PyObject* daemon_is_running(PyObject *, PyObject *) {
+    int ok = evo_irimager_daemon_is_running();
+    switch(ok) {
+        case 0:
+            Py_RETURN_TRUE;
+        
+        case -1:
+            Py_RETURN_FALSE;
+        
+        default:
+            Py_UNREACHABLE();
+    }
+    return NULL;
+}
 
 /**
  * Kill TCP daemon
@@ -324,21 +569,47 @@ PyObject* set_palette_scale(PyObject *, PyObject* args) {
  * __IRDIRECTSDK_API__ int evo_irimager_daemon_kill();
  * 
  */
+PyObject* daemon_kill(PyObject *, PyObject *) {
+    int ok = evo_irimager_daemon_kill();
+    switch(ok) {
+        case 0:
+            Py_RETURN_NONE;
+        
+        case -1:
+            PyErr_SetString(PyExc_RuntimeError, "Error");
+            break;
+
+        case -2:
+            PyErr_SetString(PyExc_RuntimeError, "Fatal error");
+            break;
+        
+        default:
+            Py_UNREACHABLE();
+    }
+    return NULL;
+}
 
 static PyMethodDef pyoptris_methods[] = {
-    // The first property is the name exposed to Python, fast_tanh, the second is the C++
-    // function name that contains the implementation.
-    { "usb_init",               (PyCFunction) usb_init,               METH_VARARGS, nullptr },
-    { "tcp_init",               (PyCFunction) tcp_init,               METH_VARARGS, nullptr },
-    { "terminate",              (PyCFunction) terminate,              METH_NOARGS, nullptr },
-    { "get_thermal_image_size", (PyCFunction) get_thermal_image_size, METH_NOARGS, nullptr },
-    { "get_palette_image_size", (PyCFunction) get_palette_image_size, METH_NOARGS, nullptr },
-    { "get_thermal_image",      (PyCFunction) get_thermal_image,      METH_NOARGS, nullptr },
-    { "get_palette_image",      (PyCFunction) get_palette_image,      METH_NOARGS, nullptr },
-    { "set_palette",            (PyCFunction) set_palette,            METH_O, nullptr },
-    { "get_palette_image",      (PyCFunction) get_palette_image,      METH_NOARGS, nullptr },
+    { "usb_init",                   (PyCFunction) usb_init,                     METH_VARARGS, nullptr },
+    { "tcp_init",                   (PyCFunction) tcp_init,                     METH_VARARGS, nullptr },
+    { "terminate",                  (PyCFunction) terminate,                    METH_NOARGS, nullptr },
+    { "get_thermal_image_size",     (PyCFunction) get_thermal_image_size,       METH_NOARGS, nullptr },
+    { "get_palette_image_size",     (PyCFunction) get_palette_image_size,       METH_NOARGS, nullptr },
+    { "get_thermal_image",          (PyCFunction) get_thermal_image,            METH_NOARGS, nullptr },
+    { "get_palette_image",          (PyCFunction) get_palette_image,            METH_NOARGS, nullptr },
+    { "get_thermal_palette_image",  (PyCFunction) get_thermal_palette_image,    METH_NOARGS, nullptr },
+    { "save_palette_to_png",        (PyCFunction) save_palette_to_png,          METH_VARARGS, nullptr },
+    { "set_palette",                (PyCFunction) set_palette,                  METH_O, nullptr },
+    { "set_palette_scale",          (PyCFunction) set_palette_scale,            METH_O, nullptr },
+    { "trigger_shutter_flag",       (PyCFunction) trigger_shutter_flag,         METH_NOARGS, nullptr },
+    { "set_temperature_range",      (PyCFunction) set_temperature_range,        METH_VARARGS, nullptr },
+    { "set_radiation_parameters",   (PyCFunction) set_radiation_parameters,     METH_VARARGS, nullptr },
+    { "set_focus_motor_position",   (PyCFunction) set_focus_motor_position,     METH_O, nullptr },
+    { "get_focus_motor_position",   (PyCFunction) get_focus_motor_position,     METH_NOARGS, nullptr },
+    { "daemon_launch",              (PyCFunction) daemon_launch,                METH_NOARGS, nullptr },
+    { "daemon_is_running",          (PyCFunction) daemon_is_running,            METH_NOARGS, nullptr },
+    { "daemon_kill",                (PyCFunction) daemon_kill,                  METH_NOARGS, nullptr },
 
-    
     // Terminate the array with an object containing nulls.
     { nullptr, nullptr, 0, nullptr }
 };
