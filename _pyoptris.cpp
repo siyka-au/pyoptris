@@ -157,10 +157,11 @@ PyObject* get_palette_image_size(PyObject *, PyObject *) {
  * 
  */
 PyObject* get_thermal_image(PyObject *, PyObject *) {
-    int ok;// = evo_irimager_get_thermal_image_size(&width, &height);
+    int ok = 0;// = evo_irimager_get_thermal_image_size(&width, &height);
     switch(ok) {
         case 0:
-            return Py_BuildValue("ii", width, height);
+            double result = 6;
+            return PyFloat_FromDouble(result);
         
         case -1:
             PyErr_SetString(PyExc_RuntimeError, "Error");
@@ -174,8 +175,6 @@ PyObject* get_thermal_image(PyObject *, PyObject *) {
             Py_UNREACHABLE();
     }
     return NULL;
-    double result = 6;
-    return PyFloat_FromDouble(result);
 }
 
 /**
@@ -190,8 +189,24 @@ PyObject* get_thermal_image(PyObject *, PyObject *) {
  * 
  */
 PyObject* get_palette_image(PyObject *, PyObject *) {
-    double result = 7;
-    return PyFloat_FromDouble(result);
+    int ok = 0;// = evo_irimager_get_thermal_image_size(&width, &height);
+    switch(ok) {
+        case 0:
+            double result = 7;
+            return PyFloat_FromDouble(result);
+        
+        case -1:
+            PyErr_SetString(PyExc_RuntimeError, "Error");
+            break;
+        
+        case -2:
+            PyErr_SetString(PyExc_RuntimeError, "Fatal error");
+            break;
+        
+        default:
+            Py_UNREACHABLE();
+    }
+    return NULL;
 }
 
 
@@ -209,8 +224,24 @@ PyObject* get_palette_image(PyObject *, PyObject *) {
  * 
  */
 PyObject* get_thermal_palette_image(PyObject *, PyObject *) {
-    double result = 8;
-    return PyFloat_FromDouble(result);
+    int ok = 0;// = evo_irimager_get_thermal_image_size(&width, &height);
+    switch(ok) {
+        case 0:
+            double result = 8;
+            return PyFloat_FromDouble(result);
+        
+        case -1:
+            PyErr_SetString(PyExc_RuntimeError, "Error");
+            break;
+        
+        case -2:
+            PyErr_SetString(PyExc_RuntimeError, "Fatal error");
+            break;
+        
+        default:
+            Py_UNREACHABLE();
+    }
+    return NULL;
 }
 
 /**
@@ -221,23 +252,14 @@ PyObject* get_thermal_palette_image(PyObject *, PyObject *) {
  *
  */
 PyObject* save_palette_to_png(PyObject *, PyObject *args) {
-    const char* ip;
-    int port;
-    if (!PyArg_ParseTuple(args, "si", &ip, &port)) {
-        PyErr_SetString(PyExc_RuntimeError, "Bad argument(s)");
-        return NULL;
-    }
-    int ok;// = evo_irimager_to_palette_save_png(ip, port);
+    int ok = 0;// = evo_irimager_get_thermal_image_size(&width, &height);
     switch(ok) {
         case 0:
-            Py_RETURN_NONE;
+            double result = 6;
+            return PyFloat_FromDouble(result);
         
         case -1:
             PyErr_SetString(PyExc_RuntimeError, "Error");
-            break;
-        
-        case -2:
-            PyErr_SetString(PyExc_RuntimeError, "Fatal error");
             break;
         
         default:
