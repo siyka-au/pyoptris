@@ -13,12 +13,20 @@ Then to use the library
 
 ```python
 import pyoptris
+import cv2
+
 pyoptris.usb_init('generic.xml')
-pyoptris.set_palette(1)
-pyoptris.set_palette_scale(1)
-width, height = pyoptris.get_thermal_image_size() # (int, int)
-thermalImage = pyoptris.get_thermal_image() # ndarray
-paletteImage = pyoptris.get_palette_image() # ndarray
+# or
+pyoptris.tcp_init('localhost', 1337)
+
+while(True):
+    frame = pyoptris.get_palette_image()
+    cv2.imshow('frame', frame)
+    if cv2.waitKey(1) & 0xFF == ord('q'):
+        break
+
+pyoptris.terminate()
+cv2.destroyAllWindows()
 ```
 
 # Notes
