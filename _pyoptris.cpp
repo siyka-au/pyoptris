@@ -169,7 +169,7 @@ PyObject * get_thermal_image(PyObject *, PyObject *) {
     unsigned short *data;
     npy_intp dimensions[2] = {height, width};
     if (ok == 0) {
-        data = (unsigned short *) malloc(width * height * sizeof(unsigned short));
+        data = (unsigned short *) PyMem_RawMalloc(width * height * sizeof(unsigned short));
         ok = evo_irimager_get_thermal_image(&width, &height, data);
 
         if (ok == 0) {
@@ -214,7 +214,7 @@ PyObject * get_palette_image(PyObject *, PyObject *) {
     unsigned char *data;
     npy_intp dimensions[3] = {height, width, 3};    
     if (ok == 0) {
-        data = (unsigned char *) malloc(width * height * 3 * sizeof(unsigned char));
+        data = (unsigned char *) PyMem_RawMalloc(width * height * 3 * sizeof(unsigned char));
         ok = evo_irimager_get_palette_image(&width, &height, data);
 
         if (ok == 0) {
