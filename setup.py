@@ -1,6 +1,6 @@
-from distutils.core import setup, Extension
+from setuptools import setup, Extension
 import platform
-import numpy.distutils.misc_util
+from numpy.distutils.misc_util import get_numpy_include_dirs
 
 if platform.system() == 'Windows':
     optrisInclude = "C:\\lib\\irDirectSDK\\sdk"
@@ -14,7 +14,7 @@ else:
 
 pyoptris = Extension( "pyoptris",
     [ "_pyoptris.cpp" ],
-    include_dirs=[ ".", optrisInclude ],
+    include_dirs=get_numpy_include_dirs() + [ ".", optrisInclude ],
     library_dirs=[ optrisLib ],
     libraries=[ 'libirimager' ],
     language='c++',
@@ -27,5 +27,4 @@ setup(
     author_email='mikey@mookins.com',
     url='https://github.com/siyka-au/pyoptris',
     ext_modules=[ pyoptris ],
-    include_dirs=numpy.distutils.misc_util.get_numpy_include_dirs(),
 )

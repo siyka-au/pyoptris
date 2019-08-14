@@ -1,5 +1,11 @@
 #include <Python.h>
+
+#define NPY_NO_DEPRECATED_API NPY_1_7_API_VERSION
+#include <numpy/arrayobject.h>
+
 #include <direct_binding.h>
+
+
 
 /**
  * @brief Initializes an IRImager instance connected to this computer via USB
@@ -11,10 +17,10 @@
  * __IRDIRECTSDK_API__ int evo_irimager_usb_init(const char* xml_config, const char* formats_def, const char* log_file);
  * 
  */
-PyObject* usb_init(PyObject *, PyObject *args) {
-    const char* xml_config;
-    const char* formats_def;
-    const char* log_file;
+PyObject * usb_init(PyObject *, PyObject *args) {
+    const char *xml_config;
+    const char *formats_def;
+    const char *log_file;
     if (!PyArg_ParseTuple(args, "s|zz", &xml_config, &formats_def, &log_file)) {
         PyErr_SetString(PyExc_RuntimeError, "Bad argument(s)");
         return NULL;
@@ -43,7 +49,7 @@ PyObject* usb_init(PyObject *, PyObject *args) {
  * __IRDIRECTSDK_API__ int evo_irimager_tcp_init(const char* ip, int port);
  * 
  */
-PyObject* tcp_init(PyObject *, PyObject *args) {
+PyObject * tcp_init(PyObject *, PyObject *args) {
     const char* ip;
     int port;
     if (!PyArg_ParseTuple(args, "si", &ip, &port)) {
@@ -76,7 +82,7 @@ PyObject* tcp_init(PyObject *, PyObject *args) {
  * __IRDIRECTSDK_API__ int evo_irimager_terminate();
  * 
  */
-PyObject* terminate(PyObject *, PyObject *) {
+PyObject * terminate(PyObject *, PyObject *) {
     int ok = evo_irimager_terminate();
     switch(ok) {
         case 0:
@@ -101,7 +107,7 @@ PyObject* terminate(PyObject *, PyObject *) {
  * __IRDIRECTSDK_API__ int evo_irimager_get_thermal_image_size(int* w, int* h);
  * 
  */
-PyObject* get_thermal_image_size(PyObject *, PyObject *) {
+PyObject * get_thermal_image_size(PyObject *, PyObject *) {
     int width, height;
     int ok = evo_irimager_get_thermal_image_size(&width, &height);
     switch(ok) {
@@ -127,7 +133,7 @@ PyObject* get_thermal_image_size(PyObject *, PyObject *) {
  * __IRDIRECTSDK_API__ int evo_irimager_get_palette_image_size(int* w, int* h);
  * 
  */
-PyObject* get_palette_image_size(PyObject *, PyObject *) {
+PyObject * get_palette_image_size(PyObject *, PyObject *) {
     int width, height;
     int ok = evo_irimager_get_palette_image_size(&width, &height);
     switch(ok) {
@@ -156,25 +162,38 @@ PyObject* get_palette_image_size(PyObject *, PyObject *) {
  * __IRDIRECTSDK_API__ int evo_irimager_get_thermal_image(int* w, int* h, unsigned short* data);
  * 
  */
-PyObject* get_thermal_image(PyObject *, PyObject *) {
-    int ok = 0;// = evo_irimager_get_thermal_image_size(&width, &height);
-    double result = 6;
-    switch(ok) {
-        case 0:
-            return PyFloat_FromDouble(result);
-        
-        case -1:
+PyObject * get_thermal_image(PyObject *, PyObject *) {
+    PyObject * result;
+    int width, height;
+    int ok = evo_irimager_get_thermal_image_size(&width, &height);
+    unsigned short *data;
+    npy_intp dimensions[2] = {height, width};
+    if (ok == 0) {
+        data = (unsigned short *) malloc(width * height * sizeof(unsigned short));
+        ok = evo_irimager_get_thermal_image(&width, &height, data);
+
+        if (ok == 0) {
+            result = PyArray_SimpleNewFromData(2, dimensions, NPY_UINT16, (void *) data);
+        } else if (ok == -1) {
             PyErr_SetString(PyExc_RuntimeError, "Error");
-            break;
-        
-        case -2:
+            result = NULL;
+        } else if(ok == -2) {
             PyErr_SetString(PyExc_RuntimeError, "Fatal error");
-            break;
-        
-        default:
+            result = NULL;
+        } else {
             abort();
+        }
+    } else if (ok == -1) {
+        PyErr_SetString(PyExc_RuntimeError, "Error");
+        result = NULL;
+    } else if(ok == -2) {
+        PyErr_SetString(PyExc_RuntimeError, "Fatal error");
+        result = NULL;
+    } else {
+        abort();
     }
-    return NULL;
+
+    return result;
 }
 
 /**
@@ -188,25 +207,39 @@ PyObject* get_thermal_image(PyObject *, PyObject *) {
  * __IRDIRECTSDK_API__ int evo_irimager_get_palette_image(int* w, int* h, unsigned char* data);
  * 
  */
-PyObject* get_palette_image(PyObject *, PyObject *) {
-    int ok = = evo_irimager_get_thermal_image_size(&width, &height);
-    double result = 7;
-    switch(ok) {
-        case 0:
-            return PyFloat_FromDouble(result);
-        
-        case -1:
+PyObject * get_palette_image(PyObject *, PyObject *) {
+    PyObject *result;
+    int width, height;
+    int ok = evo_irimager_get_palette_image_size(&width, &height);
+    unsigned char *data;
+    npy_intp dimensions[3] = {height, width, 3};    
+    if (ok == 0) {
+        data = (unsigned char *) malloc(width * height * 3 * sizeof(unsigned char));
+        ok = evo_irimager_get_palette_image(&width, &height, data);
+
+        if (ok == 0) {
+            result = PyArray_SimpleNewFromData(3, dimensions, NPY_UINT8, (void *) data);
+        } else if (ok == -1) {
             PyErr_SetString(PyExc_RuntimeError, "Error");
-            break;
-        
-        case -2:
+            result = NULL;
+        } else if(ok == -2) {
             PyErr_SetString(PyExc_RuntimeError, "Fatal error");
-            break;
-        
-        default:
+            result = NULL;
+        } else {
+            printf("Something went horribly wrong");
             abort();
+        }
+    } else if (ok == -1) {
+        PyErr_SetString(PyExc_RuntimeError, "Error");
+        result = NULL;
+    } else if(ok == -2) {
+        PyErr_SetString(PyExc_RuntimeError, "Fatal error");
+        result = NULL;
+    } else {
+        abort();
     }
-    return NULL;
+
+    return result;
 }
 
 
@@ -223,7 +256,7 @@ PyObject* get_palette_image(PyObject *, PyObject *) {
  * __IRDIRECTSDK_API__ int evo_irimager_get_thermal_palette_image(int w_t, int h_t, unsigned short* data_t, int w_p, int h_p, unsigned char* data_p );
  * 
  */
-PyObject* get_thermal_palette_image(PyObject *, PyObject *) {
+PyObject * get_thermal_palette_image(PyObject *, PyObject *) {
     int ok = 0;// = evo_irimager_get_thermal_image_size(&width, &height);
     double result = 8;
     switch(ok) {
@@ -251,7 +284,7 @@ PyObject* get_thermal_palette_image(PyObject *, PyObject *) {
  * __IRDIRECTSDK_API__ int evo_irimager_to_palette_save_png(unsigned short* thermal_data, int w, int h, const char* path, int palette, int palette_scale);
  *
  */
-PyObject* save_palette_to_png(PyObject *, PyObject *args) {
+PyObject * save_palette_to_png(PyObject *, PyObject *args) {
     int ok = 0;// = evo_irimager_get_thermal_image_size(&width, &height);
     double result = 6;
     switch(ok) {
@@ -289,7 +322,7 @@ PyObject* save_palette_to_png(PyObject *, PyObject *args) {
  * __IRDIRECTSDK_API__ int evo_irimager_set_palette(int id);
  * 
  */
-PyObject* set_palette(PyObject *, PyObject* args) {
+PyObject * set_palette(PyObject *, PyObject *args) {
     int id;
     if (!PyArg_ParseTuple(args, "i", &id)) {
         PyErr_SetString(PyExc_RuntimeError, "Bad argument(s)");
@@ -327,7 +360,7 @@ PyObject* set_palette(PyObject *, PyObject* args) {
  * __IRDIRECTSDK_API__ int evo_irimager_set_palette_scale(int scale);
  * 
  */
-PyObject* set_palette_scale(PyObject *, PyObject* args) {
+PyObject * set_palette_scale(PyObject *, PyObject *args) {
     int scale;
     if (!PyArg_ParseTuple(args, "i", &scale)) {
         PyErr_SetString(PyExc_RuntimeError, "Bad argument(s)");
@@ -361,7 +394,7 @@ PyObject* set_palette_scale(PyObject *, PyObject* args) {
  * __IRDIRECTSDK_API__ int evo_irimager_set_shutter_mode(int mode);
  * 
  */
-PyObject* set_shutter_mode(PyObject *, PyObject* args) {
+PyObject * set_shutter_mode(PyObject *, PyObject *args) {
     int mode;
     if (!PyArg_ParseTuple(args, "i", &mode)) {
         PyErr_SetString(PyExc_RuntimeError, "Bad argument(s)");
@@ -394,7 +427,7 @@ PyObject* set_shutter_mode(PyObject *, PyObject* args) {
  * __IRDIRECTSDK_API__ int evo_irimager_trigger_shutter_flag();
  * 
  */
-PyObject* trigger_shutter_flag(PyObject *, PyObject *) {
+PyObject * trigger_shutter_flag(PyObject *, PyObject *) {
     int ok = evo_irimager_trigger_shutter_flag();
     switch(ok) {
         case 0:
@@ -421,7 +454,7 @@ PyObject* trigger_shutter_flag(PyObject *, PyObject *) {
  * __IRDIRECTSDK_API__ int evo_irimager_set_temperature_range(int t_min, int t_max);
  * 
  */
-PyObject* set_temperature_range(PyObject *, PyObject *args) {
+PyObject * set_temperature_range(PyObject *, PyObject *args) {
     int minimumTemperature, maximumTemperature;
     if (!PyArg_ParseTuple(args, "ii", &minimumTemperature, &maximumTemperature)) {
         PyErr_SetString(PyExc_RuntimeError, "Bad argument(s)");
@@ -456,7 +489,7 @@ PyObject* set_temperature_range(PyObject *, PyObject *args) {
  * __IRDIRECTSDK_API__ int evo_irimager_set_radiation_parameters(float emissivity, float transmissivity, float tAmbient);
  * 
  */
-PyObject* set_radiation_parameters(PyObject *, PyObject *args) {
+PyObject * set_radiation_parameters(PyObject *, PyObject *args) {
     float emissivity, transmissivity, ambientTemperature;
     if (!PyArg_ParseTuple(args, "fff", &emissivity, &transmissivity, &ambientTemperature)) {
         PyErr_SetString(PyExc_RuntimeError, "Bad argument(s)");
@@ -489,7 +522,7 @@ PyObject* set_radiation_parameters(PyObject *, PyObject *args) {
  * __IRDIRECTSDK_API__ int evo_irimager_set_focusmotor_pos(float pos);
  * 
  */
-PyObject* set_focus_motor_position(PyObject *, PyObject *args) {
+PyObject * set_focus_motor_position(PyObject *, PyObject *args) {
     float position;
     if (!PyArg_ParseTuple(args, "f", &position)) {
         PyErr_SetString(PyExc_RuntimeError, "Bad argument(s)");
@@ -518,7 +551,7 @@ PyObject* set_focus_motor_position(PyObject *, PyObject *args) {
  * __IRDIRECTSDK_API__ int evo_irimager_get_focusmotor_pos(float *posOut);
  * 
  */
-PyObject* get_focus_motor_position(PyObject *, PyObject *) {
+PyObject * get_focus_motor_position(PyObject *, PyObject *) {
     float position;
     int ok = evo_irimager_get_focusmotor_pos(&position);
     switch(ok) {
@@ -542,7 +575,7 @@ PyObject* get_focus_motor_position(PyObject *, PyObject *) {
  * __IRDIRECTSDK_API__ int evo_irimager_daemon_launch();
  * 
  */
-PyObject* daemon_launch(PyObject *, PyObject *) {
+PyObject * daemon_launch(PyObject *, PyObject *) {
     int ok = evo_irimager_daemon_launch();
     switch(ok) {
         case 0:
@@ -569,7 +602,7 @@ PyObject* daemon_launch(PyObject *, PyObject *) {
  * __IRDIRECTSDK_API__ int evo_irimager_daemon_is_running();
  * 
  */
-PyObject* daemon_is_running(PyObject *, PyObject *) {
+PyObject * daemon_is_running(PyObject *, PyObject *) {
     int ok = evo_irimager_daemon_is_running();
     switch(ok) {
         case 0:
@@ -591,7 +624,7 @@ PyObject* daemon_is_running(PyObject *, PyObject *) {
  * __IRDIRECTSDK_API__ int evo_irimager_daemon_kill();
  * 
  */
-PyObject* daemon_kill(PyObject *, PyObject *) {
+PyObject * daemon_kill(PyObject *, PyObject *) {
     int ok = evo_irimager_daemon_kill();
     switch(ok) {
         case 0:
@@ -654,5 +687,6 @@ static PyModuleDef pyoptris_module = {
 };
 
 PyMODINIT_FUNC PyInit_pyoptris() {
+    import_array();
     return PyModule_Create(&pyoptris_module);
 }
