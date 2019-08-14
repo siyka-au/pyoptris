@@ -28,11 +28,15 @@ while(True):
 pyoptris.terminate()
 cv2.destroyAllWindows()
 ```
+# Limitations and Issues
+* This library **leaks** memory. I haven't gotten so far as to work this part out but it will come soon.
+* Can only talk to one camera at the moment, need to bind to the C++ library rather than the C direct_binding functions.
+* Lots of hacked together programming at this stage, so there is limited error checking, no guarantee of best practices etc.
 
 # Notes
 This has been tested on Windows 10 with Miniconda 4.7.11, Python 3.7.4 64bit, Build Tools for Visual Studio 2019, and with an Optris PI 450 camera.
 
-I am very new to working with the Python C API so there are likely lots of issues with the code, I was only coding with this for a short time to test a camera from a supplier. I am also new to writing Python extensions, especially using distutils, so this may also be incomplete.
+I am very new to working with the Python C API so there are likely lots of issues with the code, I was only coding with this for a short time to test a camera from a supplier. I am also new to writing Python extensions, especially using setuptools, so this may also be incomplete.
 
 I welcome any suggestions, pull requests, discussion, etc.
 
